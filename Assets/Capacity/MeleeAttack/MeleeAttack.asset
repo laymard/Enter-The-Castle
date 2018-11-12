@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e32a063ec36c6f648a1f3576e2ef6bae, type: 3}
+  m_Name: MeleeAttack
+  m_EditorClassIdentifier: 
+  FullRecoverTiming: 0.5
+  EmptyGaugeOnTrigger: 1
+  ConsumationRateOnTrigger: 0
+  GaugeCompletionOnStart: 0
