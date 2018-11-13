@@ -15,6 +15,7 @@ public class WeaponController : MonoBehaviour {
     public float ComingBackTiming;
     public float ComingBackSpeed;
     public WeaponAudio WeaponAudio;
+    public float DistanceToGoToNormalRotation;
 
     //rad per seconds
     public float RotationSpeed;
@@ -82,7 +83,9 @@ public class WeaponController : MonoBehaviour {
         {
             m_Rigidbody.isKinematic = true;
             m_bIsOnRangeAttack = false;
-            m_AudioSource.Stop();
+            StopCoroutine("Rotate");
+            WeaponAudio.ImpactData.SetToAudioSource(ref m_AudioSource);
+            m_AudioSource.Play();
         }
         else
         {
@@ -109,7 +112,9 @@ public class WeaponController : MonoBehaviour {
         transform.forward = Vector3.up;
 
         // apply rotation speed
-        m_Rigidbody.angularVelocity = new Vector3(0.0f, -RotationSpeed, 0.0f);
+        //m_Rigidbody.angularVelocity = new Vector3(0.0f, -RotationSpeed, 0.0f);
+        StartCoroutine("Rotate");
+        //m_Rigidbody.AddTorque(new Vector3(0.0f, -RotationSpeed, 0.0f), ForceMode.VelocityChange);
         // apply velocity
         m_Rigidbody.velocity = Camera.main.transform.forward * ThrowSpeed;
         m_Rigidbody.isKinematic = false;
@@ -118,6 +123,7 @@ public class WeaponController : MonoBehaviour {
         m_Animator.enabled = false;
         m_bIsOnRangeAttack = true;
 
+        WeaponAudio.WooshLoopData.SetToAudioSource(ref m_AudioSource);
         m_AudioSource.Play();
 
     }
@@ -129,13 +135,19 @@ public class WeaponController : MonoBehaviour {
         float fCoveredDist = 0.0f;
         SafeSetParent(null);
         Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
-        while (vWeaponToTarget.sqrMagnitude>0.01f)
+        bool bTriggeredStopRotation = false;
+        while (vWeaponToTarget.sqrMagnitude>0.05f)
         {
             Vector3 vDirToTarget = vWeaponToTarget.normalized;
             float fDistToCover = Vector3.Distance(vStartPosition, m_WeaponContainer.transform.position);
             transform.position += vDirToTarget * ComingBackSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.Lerp(qStartOrientation, m_WeaponContainer.transform.rotation, fCoveredDist/ fDistToCover);
+            if(!bTriggeredStopRotation && vWeaponToTarget.sqrMagnitude < Mathf.Pow(DistanceToGoToNormalRotation, 2) )
+            {
 
+                StopCoroutine("Rotate");
+                StartCoroutine("RotateToNormalPos");
+                bTriggeredStopRotation = true;
+            }
             fCoveredDist += ComingBackSpeed * Time.deltaTime;
             vWeaponToTarget = -ComputeWeaponToWeaponContainer();
             yield return null;
@@ -166,6 +178,8 @@ public class WeaponController : MonoBehaviour {
     private void StartComingBack()
     {
         // apply rotation speed
+        StopCoroutine("Rotate");
+        StartCoroutine("Rotate");
         m_Rigidbody.velocity = Vector3.zero;
         m_Rigidbody.angularVelocity = Vector3.zero;
         m_Rigidbody.isKinematic = true;
@@ -175,12 +189,13 @@ public class WeaponController : MonoBehaviour {
         m_bIsOnRangeAttack = false;
         m_bIsComingBack = true;
 
+        WeaponAudio.WooshLoopData.SetToAudioSource(ref m_AudioSource);
         m_AudioSource.Play();
     }
 
     private void OnGettingBack()
     {
-
+        StopCoroutine("RotateToNormalPos");
         transform.position = m_WeaponContainer.transform.position;
         transform.rotation = m_WeaponContainer.transform.rotation;
         SafeSetParent(m_WeaponContainer.transform);
@@ -193,7 +208,8 @@ public class WeaponController : MonoBehaviour {
         m_bIsOnRangeAttack = false;
         m_bIsComingBack = false;
 
-        m_AudioSource.Stop();
+        WeaponAudio.GettingBackData.SetToAudioSource(ref m_AudioSource);
+        m_AudioSource.Play();
     }
 
     private bool CanThrowWeapon()
@@ -205,4 +221,42 @@ public class WeaponController : MonoBehaviour {
     {
         return transform.position - m_WeaponContainer.transform.position;
     }
+
+    private void ChangeSound(AudioClip _audioClip)
+    {
+        m_AudioSource.clip = _audioClip;
+    }
+
+    IEnumerator Rotate()
+    {
+        Vector3 vRotationAngle = new Vector3(0f, -RotationSpeed * Time.deltaTime, 0f);
+        while(true)
+        {
+            transform.Rotate(vRotationAngle, Space.World);
+            yield return null;
+        }
+    }
+
+    IEnumerator RotateToNormalPos()
+    {
+        Vector3 vStartPosition = transform.position;
+        Quaternion qStartOrientation = transform.rotation;
+        float fCoveredDist = 0.0f;
+        SafeSetParent(null);
+        Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+        while (vWeaponToTarget.sqrMagnitude > 0.05f)
+        {
+            Vector3 vDirToTarget = vWeaponToTarget.normalized;
+            float fDistToCover = Vector3.Distance(vStartPosition, m_WeaponContainer.transform.position);
+
+            transform.rotation = Quaternion.Lerp(qStartOrientation, m_WeaponContainer.transform.rotation, fCoveredDist/ fDistToCover);
+
+            fCoveredDist += ComingBackSpeed * Time.deltaTime;
+            vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+            yield return null;
+        }
+
+        yield return null;
+    }
 }
+

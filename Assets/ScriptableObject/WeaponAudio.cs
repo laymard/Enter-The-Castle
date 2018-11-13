@@ -2,13 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+using System;
+
+
+[Serializable]
+public class AudioData
+{
+    public AudioClip AudioClip;
+    public bool Loop;
+
+    public void SetToAudioSource(ref AudioSource _audioSource)
+    {
+        _audioSource.clip = AudioClip;
+        _audioSource.loop = Loop;
+    }
+}
+
+
 [CreateAssetMenu()]
 public class WeaponAudio : ScriptableObject {
 
-    public AudioClip ImpactSound;
-    public AudioClip GettingBackSound;
-    public AudioClip MeleeSound;
-    public AudioClip WooshLoop;
+
+
+
+    public AudioData ImpactData;
+
+    public AudioData GettingBackData;
+    public AudioData MeleeData;
+    public AudioData WooshLoopData;
 
 	// Use this for initialization
 	void Start () {
