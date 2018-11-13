@@ -2356,7 +2356,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThrowSpeed: 10
-  ComingBackSpeed: 3
+  ComingBackTiming: 2
+  ComingBackSpeed: 7
   RotationSpeed: 8
   DebugShootEnabled: 1
 --- !u!1001 &1554391836

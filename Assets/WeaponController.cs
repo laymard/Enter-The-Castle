@@ -11,6 +11,7 @@ public class WeaponController : MonoBehaviour {
     private Transform m_WeaponContainer;
 
     public float ThrowSpeed;
+    public float ComingBackTiming;
     public float ComingBackSpeed;
 
     //rad per seconds
@@ -19,6 +20,7 @@ public class WeaponController : MonoBehaviour {
 
     private bool m_bIsOnRangeAttack;
     private bool m_bIsComingBack;
+
 
     // Use this for initialization
     void Start()
@@ -116,20 +118,23 @@ public class WeaponController : MonoBehaviour {
 
     private IEnumerator ComingBackToPlayer()
     {
+        Vector3 vStartPosition = transform.position;
+        Quaternion qStartOrientation = transform.rotation;
+        float fCoveredDist = 0.0f;
         SafeSetParent(null);
-        Vector3 vTargetPosition = m_WeaponContainer.transform.position;
-        while((m_WeaponContainer.transform.position- transform.position).sqrMagnitude>0.5f)
+        Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+        while (vWeaponToTarget.sqrMagnitude>0.01f)
         {
-            transform.position = Vector3.Lerp(transform.position, m_WeaponContainer.transform.position, Time.deltaTime* ComingBackSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, m_WeaponContainer.transform.rotation, Time.deltaTime* ComingBackSpeed);
+            Vector3 vDirToTarget = vWeaponToTarget.normalized;
+            float fDistToCover = Vector3.Distance(vStartPosition, m_WeaponContainer.transform.position);
+            transform.position += vDirToTarget * ComingBackSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(qStartOrientation, m_WeaponContainer.transform.rotation, fCoveredDist/ fDistToCover);
+
+            fCoveredDist += ComingBackSpeed * Time.deltaTime;
+            vWeaponToTarget = -ComputeWeaponToWeaponContainer();
             yield return null;
         }
-        while ((m_WeaponContainer.transform.position - transform.position).sqrMagnitude > 0.001f)
-        {
-            transform.position = Vector3.Lerp(transform.position, m_WeaponContainer.transform.position, Time.deltaTime*4.0f* ComingBackSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, m_WeaponContainer.transform.rotation, Time.deltaTime*4.0f* ComingBackSpeed);
-            yield return null;
-        }
+
         OnGettingBack();
         yield return null;
     }
@@ -184,5 +189,10 @@ public class WeaponController : MonoBehaviour {
     private bool CanThrowWeapon()
     {
         return !m_bIsOnRangeAttack && !m_bIsComingBack;
+    }
+
+    public Vector3 ComputeWeaponToWeaponContainer()
+    {
+        return transform.position - m_WeaponContainer.transform.position;
     }
 }
