@@ -10,10 +10,11 @@ public class WeaponController : MonoBehaviour {
     private Rigidbody m_Rigidbody;
     private Transform m_WeaponContainer;
     private AudioSource m_AudioSource;
-
+    
     public float ThrowSpeed;
     public float ComingBackTiming;
     public float ComingBackSpeed;
+    public WeaponAudio WeaponAudio;
 
     //rad per seconds
     public float RotationSpeed;

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3fef074a9fb4eb46ae51f5a0b000620, type: 3}
+  m_Name: Axe_Audio
+  m_EditorClassIdentifier: 
+  ImpactSound: {fileID: 8300000, guid: 28a0d91f1f8161046ab41982f00a6487, type: 3}
+  GettingBackSound: {fileID: 8300000, guid: 25e8725ef6b090a42b96ac7ec68ebb22, type: 3}
+  MeleeSound: {fileID: 0}
+  WooshLoop: {fileID: 8300000, guid: 625327af4b52043489b5e12f959c23f3, type: 3}
