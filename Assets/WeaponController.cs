@@ -9,6 +9,7 @@ public class WeaponController : MonoBehaviour {
     private Collider m_Collider;
     private Rigidbody m_Rigidbody;
     private Transform m_WeaponContainer;
+    private AudioSource m_AudioSource;
 
     public float ThrowSpeed;
     public float ComingBackTiming;
@@ -28,6 +29,7 @@ public class WeaponController : MonoBehaviour {
         m_Animator = GetComponent<Animator>();
         m_Collider = GetComponent<Collider>();
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_AudioSource = GetComponent<AudioSource>();
         m_WeaponContainer = transform.parent;
         m_bIsOnRangeAttack = false;
         m_bIsComingBack = false;
@@ -79,6 +81,7 @@ public class WeaponController : MonoBehaviour {
         {
             m_Rigidbody.isKinematic = true;
             m_bIsOnRangeAttack = false;
+            m_AudioSource.Stop();
         }
         else
         {
@@ -113,6 +116,8 @@ public class WeaponController : MonoBehaviour {
         //deactivate animator
         m_Animator.enabled = false;
         m_bIsOnRangeAttack = true;
+
+        m_AudioSource.Play();
 
     }
 
@@ -168,6 +173,8 @@ public class WeaponController : MonoBehaviour {
         m_Animator.enabled = false;
         m_bIsOnRangeAttack = false;
         m_bIsComingBack = true;
+
+        m_AudioSource.Play();
     }
 
     private void OnGettingBack()
@@ -184,6 +191,8 @@ public class WeaponController : MonoBehaviour {
         m_Animator.enabled = true;
         m_bIsOnRangeAttack = false;
         m_bIsComingBack = false;
+
+        m_AudioSource.Stop();
     }
 
     private bool CanThrowWeapon()
