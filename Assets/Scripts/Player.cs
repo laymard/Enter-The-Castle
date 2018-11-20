@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using GameInterface;
 
 [System.Serializable]
 public class InteractibleEvent : UnityEvent<Interactible>
@@ -9,7 +10,7 @@ public class InteractibleEvent : UnityEvent<Interactible>
 
 }
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour, IPausable {
 
     public float InteractionRange;
     public Inventory PlayerInventory;
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
 
     public Capacity MeleeAttackCapacity;
 
+    private bool m_bOnPause = false;
 
 	// Use this for initialization
 	void Start () {
@@ -74,18 +76,21 @@ public class Player : MonoBehaviour {
 
         if(m_fInteractionTimer<0)
         {
-            if (Input.GetAxis("Interact")>0.8f && CurrentAimedLoot !=null && CurrentAimedLoot.isActiveAndEnabled)
+            if(!m_bOnPause)
             {
-                LootObject(CurrentAimedLoot);
-                m_fInteractionTimer = InteractionCoolDown;
-            }
+                if (Input.GetAxis("Interact")>0.8f && CurrentAimedLoot !=null && CurrentAimedLoot.isActiveAndEnabled)
+                {
+                    LootObject(CurrentAimedLoot);
+                    m_fInteractionTimer = InteractionCoolDown;
+                }
 
 
-            if (Input.GetAxis("Interact") > 0.8f && m_InteractibleAimed != null && m_InteractibleAimed.CanBeTriggeredByPlayer(this))
-            {
-                m_InteractibleAimed.LaunchInteraction(this);
-                m_fInteractionTimer = InteractionCoolDown;
+                if (Input.GetAxis("Interact") > 0.8f && m_InteractibleAimed != null && m_InteractibleAimed.CanBeTriggeredByPlayer(this))
+                {
+                    m_InteractibleAimed.LaunchInteraction(this);
+                    m_fInteractionTimer = InteractionCoolDown;
 
+                }
             }
 
 
@@ -95,10 +100,13 @@ public class Player : MonoBehaviour {
             m_fInteractionTimer -= Time.deltaTime;
         }
 
-        if(Input.GetAxis("MeleeAttack") > 0.9f && MeleeAttackCapacity.CanTriggerCapacity())
+        if(!m_bOnPause)
         {
-            m_WeaponController.StartMeleeAttack();
-            MeleeAttackCapacity.TriggerCapacity();
+            if(Input.GetAxis("MeleeAttack") > 0.9f && MeleeAttackCapacity.CanTriggerCapacity())
+            {
+                m_WeaponController.StartMeleeAttack();
+                MeleeAttackCapacity.TriggerCapacity();
+            }
         }
     }
 
@@ -118,5 +126,15 @@ public class Player : MonoBehaviour {
         }
 
         
+    }
+
+    public void OnPause()
+    {
+        m_bOnPause = true;
+    }
+
+    public void OnResume()
+    {
+        m_bOnPause = false;
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using GameInterface;
+using System.Linq;
 public class GameManager : MonoBehaviour {
 
     private static bool created = false;
@@ -42,6 +44,8 @@ public class GameManager : MonoBehaviour {
             {
                 OnStartPause();
             }
+
+            SetPauseElement(true);
         }
 	}
 
@@ -63,13 +67,31 @@ public class GameManager : MonoBehaviour {
         {
             OnResumeGame();
         }
+        SetPauseElement(false);
     }
 
     private void SetCursorVisible(bool _bVisible)
     {
         Cursor.visible = _bVisible;
+        
     }
 
     public void ShowCursor() { SetCursorVisible(true); Cursor.lockState = CursorLockMode.None; }
     public void HideCursor() { SetCursorVisible(false); Cursor.lockState = CursorLockMode.Confined; }
+
+    private void SetPauseElement(bool _bIsOnPause)
+    {
+        foreach ( IPausable pausable in FindObjectsOfType<MonoBehaviour>().OfType<IPausable>())
+        {
+            if(_bIsOnPause)
+            {
+                pausable.OnPause();
+            }
+            else
+            {
+                pausable.OnResume();
+            }
+        }
+    }
+    
 }

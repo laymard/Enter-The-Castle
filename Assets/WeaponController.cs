@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class WeaponController : MonoBehaviour {
+using GameInterface;
+public class WeaponController : MonoBehaviour, IPausable
+{
 
 
     private Animator m_Animator;
@@ -23,6 +24,8 @@ public class WeaponController : MonoBehaviour {
 
     private bool m_bIsOnRangeAttack;
     private bool m_bIsComingBack;
+
+    private bool m_bIsOnPause = false;
 
 
     // Use this for initialization
@@ -65,8 +68,7 @@ public class WeaponController : MonoBehaviour {
             }
         }
 
-        float sqrDist = (transform.position - m_WeaponContainer.transform.position).sqrMagnitude;
-        if(m_bIsOnRangeAttack && sqrDist>1.0f)
+        if(CanTakeWeaponBack())
         {
             if (Input.GetAxis("Fire3") > 0.9f )
             {
@@ -214,7 +216,7 @@ public class WeaponController : MonoBehaviour {
 
     private bool CanThrowWeapon()
     {
-        return !m_bIsOnRangeAttack && !m_bIsComingBack;
+        return !m_bIsOnRangeAttack && !m_bIsComingBack && !m_bIsOnPause;
     }
 
     public Vector3 ComputeWeaponToWeaponContainer()
@@ -257,6 +259,25 @@ public class WeaponController : MonoBehaviour {
         }
 
         yield return null;
+    }
+
+    public bool CanTakeWeaponBack()
+    {
+        float sqrDist = (transform.position - m_WeaponContainer.transform.position).sqrMagnitude;
+        if (m_bIsOnRangeAttack && sqrDist > 1.0f && !m_bIsOnPause)
+            return true;
+
+        return false;
+    }
+
+    public void OnPause()
+    {
+        m_bIsOnPause = true;
+    }
+
+    public void OnResume()
+    {
+        m_bIsOnPause = false;
     }
 }
 
