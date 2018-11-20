@@ -18,14 +18,24 @@ public class NPCController : MonoBehaviour {
     private float m_fRoamingTimer;
 	// Use this for initialization
 	void Start () {
+        InitVariables();
+    }
+
+    private void Reset()
+    {
+        InitVariables();
+    }
+
+    void InitVariables()
+    {
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
         m_fRoamingTimer = TimeToNewRoaming;
         m_Animator = GetComponent<Animator>();
         m_RigidBody = GetComponent<Rigidbody>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         UpdateRoaming();
         UpdateAnimationParam();
     }
@@ -72,6 +82,8 @@ public class NPCController : MonoBehaviour {
 
     public void OnDrawGizmos()
     {
+        if (m_NavMeshAgent == null)
+            InitVariables();
         for (int i = 0; i < m_NavMeshAgent.path.corners.Length - 1; i++)
         {
             Debug.DrawLine(m_NavMeshAgent.path.corners[i], m_NavMeshAgent.path.corners[i + 1], Color.red);

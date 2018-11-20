@@ -3391,8 +3391,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllowRoaming: 1
-  TimeToNewRoaming: 5
-  RangeToNextDestination: 2
+  TimeToNewRoaming: 3
+  RangeToNextDestination: 3
 --- !u!1 &1952715921
 GameObject:
   m_ObjectHideFlags: 0
