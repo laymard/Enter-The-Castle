@@ -487,6 +487,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 114172483}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &221047378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 221047379}
+  m_Layer: 0
+  m_Name: NPC_Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &221047379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 221047378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.29, y: 0.40929842, z: -6.65}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &255765733 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114397345554971914, guid: fc0b0318e78121d4e8feccce4d9073bd,
@@ -2500,7 +2528,7 @@ Prefab:
     - target: {fileID: 95404361744831658, guid: 05cfb52513e6a54419b519476495a8a6,
         type: 2}
       propertyPath: m_ApplyRootMotion
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05cfb52513e6a54419b519476495a8a6, type: 2}
@@ -3385,14 +3413,37 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1908303580}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 040c2bc0dd2f07c46ba818b4787c1971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllowRoaming: 1
+  AllowRoaming: 0
   TimeToNewRoaming: 3
   RangeToNextDestination: 3
+--- !u!114 &1908303590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1908303580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb729c2a36c05e3499fbcb5962e4e9a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentTarget: {fileID: 221047379}
+  TurnParamName: Turn
+  ForwardParamName: Forward
+  OnTargetReach:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ReachDistanceThreshold: 0.5
+  ReachAngleThreshold: 2
+  MaxForwardSpeed: 0.2
+  MaxTurnSpeed: 0.2
 --- !u!1 &1952715921
 GameObject:
   m_ObjectHideFlags: 0

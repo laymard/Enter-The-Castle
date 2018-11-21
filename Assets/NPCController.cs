@@ -15,6 +15,8 @@ public class NPCController : MonoBehaviour {
     public float TimeToNewRoaming;
     public float RangeToNextDestination;
 
+    
+
     private float m_fRoamingTimer;
 	// Use this for initialization
 	void Start () {
