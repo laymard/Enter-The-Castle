@@ -26,6 +26,7 @@ public class WeaponController : MonoBehaviour, IPausable
     public float ComingBackSpeed;
     public WeaponAudio WeaponAudio;
     public float DistanceToGoToNormalRotation;
+    public float FallingTiming;
 
     //rad per seconds
     public float RotationSpeed;
@@ -90,6 +91,7 @@ public class WeaponController : MonoBehaviour, IPausable
             m_Rigidbody.isKinematic = true;
             m_WeaponState = E_WeaponState.LANDED;
             StopCoroutine("Rotate");
+            StopCoroutine("FallingDelayed");
             WeaponAudio.ImpactData.SetToAudioSource(ref m_AudioSource);
             m_AudioSource.Play();
         }
@@ -119,6 +121,7 @@ public class WeaponController : MonoBehaviour, IPausable
 
         // apply rotation speed
         StartCoroutine("Rotate");
+        StartCoroutine("FallingDelayed");
         // apply velocity
         m_Rigidbody.velocity = Camera.main.transform.forward * ThrowSpeed;
         m_Rigidbody.isKinematic = false;
@@ -149,6 +152,7 @@ public class WeaponController : MonoBehaviour, IPausable
             {
 
                 StopCoroutine("Rotate");
+                StopCoroutine("FallingDelayed");
                 StartCoroutine("RotateToNormalPos");
                 bTriggeredStopRotation = true;
             }
@@ -187,7 +191,7 @@ public class WeaponController : MonoBehaviour, IPausable
         m_Rigidbody.velocity = Vector3.zero;
         m_Rigidbody.angularVelocity = Vector3.zero;
         m_Rigidbody.isKinematic = true;
-
+        m_Rigidbody.useGravity = false;
         //deactivate animator
         m_Animator.enabled = false;
         m_WeaponState = E_WeaponState.COMING_BACK;
@@ -279,5 +283,27 @@ public class WeaponController : MonoBehaviour, IPausable
     {
         m_bIsOnPause = false;
     }
+
+    IEnumerator FallingDelayed()
+    {
+        float fTimer = FallingTiming;
+        while(fTimer>0.0f)
+        {
+            fTimer -= Time.deltaTime;
+            yield return null;
+
+        }
+
+        OnStartFalling();
+
+        yield return null;
+    }
+
+    public void OnStartFalling()
+    {
+        m_Rigidbody.isKinematic = false;
+        m_Rigidbody.useGravity = true;
+    }
+    
 }
 
