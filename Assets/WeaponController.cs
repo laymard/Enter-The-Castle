@@ -2,9 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameInterface;
+
+
+
 public class WeaponController : MonoBehaviour, IPausable
 {
-
+    enum E_WeaponState
+    {
+        HOLDED,
+        THROWING,
+        LANDED,
+        COMING_BACK
+    }
 
     private Animator m_Animator;
     private Collider m_Collider;
@@ -22,11 +31,8 @@ public class WeaponController : MonoBehaviour, IPausable
     public float RotationSpeed;
     public bool DebugShootEnabled;
 
-    private bool m_bIsOnRangeAttack;
-    private bool m_bIsComingBack;
-
     private bool m_bIsOnPause = false;
-
+    private E_WeaponState m_WeaponState;
 
     // Use this for initialization
     void Start()
@@ -36,8 +42,7 @@ public class WeaponController : MonoBehaviour, IPausable
         m_Rigidbody = GetComponent<Rigidbody>();
         m_AudioSource = GetComponent<AudioSource>();
         m_WeaponContainer = transform.parent;
-        m_bIsOnRangeAttack = false;
-        m_bIsComingBack = false;
+        m_WeaponState = E_WeaponState.HOLDED;
     }
 
     // Update is called once per frame
@@ -80,11 +85,10 @@ public class WeaponController : MonoBehaviour, IPausable
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        if(m_bIsOnRangeAttack)
+        if(m_WeaponState==E_WeaponState.THROWING)
         {
             m_Rigidbody.isKinematic = true;
-            m_bIsOnRangeAttack = false;
+            m_WeaponState = E_WeaponState.LANDED;
             StopCoroutine("Rotate");
             WeaponAudio.ImpactData.SetToAudioSource(ref m_AudioSource);
             m_AudioSource.Play();
@@ -114,16 +118,14 @@ public class WeaponController : MonoBehaviour, IPausable
         transform.forward = Vector3.up;
 
         // apply rotation speed
-        //m_Rigidbody.angularVelocity = new Vector3(0.0f, -RotationSpeed, 0.0f);
         StartCoroutine("Rotate");
-        //m_Rigidbody.AddTorque(new Vector3(0.0f, -RotationSpeed, 0.0f), ForceMode.VelocityChange);
         // apply velocity
         m_Rigidbody.velocity = Camera.main.transform.forward * ThrowSpeed;
         m_Rigidbody.isKinematic = false;
 
         //deactivate animator
         m_Animator.enabled = false;
-        m_bIsOnRangeAttack = true;
+        m_WeaponState = E_WeaponState.THROWING;
 
         WeaponAudio.WooshLoopData.SetToAudioSource(ref m_AudioSource);
         m_AudioSource.Play();
@@ -188,8 +190,7 @@ public class WeaponController : MonoBehaviour, IPausable
 
         //deactivate animator
         m_Animator.enabled = false;
-        m_bIsOnRangeAttack = false;
-        m_bIsComingBack = true;
+        m_WeaponState = E_WeaponState.COMING_BACK;
 
         WeaponAudio.WooshLoopData.SetToAudioSource(ref m_AudioSource);
         m_AudioSource.Play();
@@ -207,8 +208,7 @@ public class WeaponController : MonoBehaviour, IPausable
 
         //deactivate animator
         m_Animator.enabled = true;
-        m_bIsOnRangeAttack = false;
-        m_bIsComingBack = false;
+        m_WeaponState = E_WeaponState.HOLDED;
 
         WeaponAudio.GettingBackData.SetToAudioSource(ref m_AudioSource);
         m_AudioSource.Play();
@@ -216,7 +216,7 @@ public class WeaponController : MonoBehaviour, IPausable
 
     private bool CanThrowWeapon()
     {
-        return !m_bIsOnRangeAttack && !m_bIsComingBack && !m_bIsOnPause;
+        return m_WeaponState==E_WeaponState.HOLDED && !m_bIsOnPause;
     }
 
     public Vector3 ComputeWeaponToWeaponContainer()
@@ -264,7 +264,7 @@ public class WeaponController : MonoBehaviour, IPausable
     public bool CanTakeWeaponBack()
     {
         float sqrDist = (transform.position - m_WeaponContainer.transform.position).sqrMagnitude;
-        if (m_bIsOnRangeAttack && sqrDist > 1.0f && !m_bIsOnPause)
+        if (( m_WeaponState==E_WeaponState.THROWING || m_WeaponState == E_WeaponState.LANDED)  && sqrDist > 1.0f && !m_bIsOnPause)
             return true;
 
         return false;
