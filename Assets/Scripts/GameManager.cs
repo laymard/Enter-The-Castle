@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
             {
                 Singleton = Instantiate(FindObjectOfType<GameManager>());
                 DontDestroyOnLoad(Singleton);
+                Singleton.enabled = true;
             }
             return Singleton;
         }
@@ -34,10 +35,6 @@ public class GameManager : MonoBehaviour {
             Debug.Log("Start: " + this.gameObject);
             Singleton = Instantiate(this);
             DontDestroyOnLoad(Singleton);
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
         Singleton.OnStartPause += ShowCursor;
         Singleton.OnResumeGame += HideCursor;
