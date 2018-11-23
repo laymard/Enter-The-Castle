@@ -7,30 +7,40 @@ using GameInterface;
 using System.Linq;
 public class GameManager : MonoBehaviour {
 
-    private static bool created = false;
     public event Action OnStartPause;
     public event Action OnResumeGame;
-    public static GameManager Singleton;
-    private int m_iCountDebugPressed;
-    void Awake()
+    private static GameManager Singleton;
+
+    public static GameManager Instance
     {
-       
-        if (!created)
+        get
+        {
+            if (Singleton == null)
+            {
+                Singleton = Instantiate(FindObjectOfType<GameManager>());
+                DontDestroyOnLoad(Singleton);
+            }
+            return Singleton;
+        }
+    }
+    private int m_iCountDebugPressed;
+
+    // Use this for initialization
+    void Start () {
+
+        if (Singleton == null)
         {
             DontDestroyOnLoad(this.gameObject);
-            created = true;
-            Debug.Log("Awake: " + this.gameObject);
-            Singleton = this;
+            Debug.Log("Start: " + this.gameObject);
+            Singleton = Instantiate(this);
+            DontDestroyOnLoad(Singleton);
         }
         else
         {
             gameObject.SetActive(false);
         }
-    }
-    // Use this for initialization
-    void Start () {
-        OnStartPause += ShowCursor;
-        OnResumeGame += HideCursor;
+        Singleton.OnStartPause += ShowCursor;
+        Singleton.OnResumeGame += HideCursor;
     }
 	
 	// Update is called once per frame
@@ -40,9 +50,9 @@ public class GameManager : MonoBehaviour {
         // Quitting game with escape
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(OnStartPause != null)
+            if(Singleton.OnStartPause != null)
             {
-                OnStartPause();
+                Singleton.OnStartPause.Invoke();
             }
 
             SetPauseElement(true);
@@ -63,9 +73,9 @@ public class GameManager : MonoBehaviour {
 
     public  void RequestResumeGame()
     {
-        if (OnResumeGame != null)
+        if (Singleton.OnResumeGame != null)
         {
-            OnResumeGame();
+            Singleton.OnResumeGame.Invoke();
         }
         SetPauseElement(false);
     }
@@ -76,8 +86,16 @@ public class GameManager : MonoBehaviour {
         
     }
 
-    public void ShowCursor() { SetCursorVisible(true); Cursor.lockState = CursorLockMode.None; }
-    public void HideCursor() { SetCursorVisible(false); Cursor.lockState = CursorLockMode.Confined; }
+    public void ShowCursor()
+    {
+        SetCursorVisible(true);
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void HideCursor()
+    {
+        SetCursorVisible(false);
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
     private void SetPauseElement(bool _bIsOnPause)
     {

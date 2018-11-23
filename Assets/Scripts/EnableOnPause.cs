@@ -11,7 +11,7 @@ public class EnableOnPause : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        m_GameManager = GameManager.Singleton;
+        m_GameManager = GameManager.Instance;
         m_GameManager.OnStartPause += ShowObject;
         m_GameManager.OnResumeGame += HideObject;
 
@@ -19,20 +19,15 @@ public class EnableOnPause : MonoBehaviour {
 
     private void OnDisable()
     {
-        GameManager.Singleton.OnStartPause -= ShowObject;
-        GameManager.Singleton.OnResumeGame -= HideObject;
+        GameManager.Instance.OnStartPause -= ShowObject;
+        GameManager.Instance.OnResumeGame -= HideObject;
         
     }
 
     private void OnEnable()
     {
-        if(m_GameManager == null)
-        {
-            m_GameManager = GameManager.Singleton;
-
-        }
-        m_GameManager.OnStartPause += ShowObject;
-        m_GameManager.OnResumeGame += HideObject;
+        GameManager.Instance.OnStartPause += ShowObject;
+        GameManager.Instance.OnResumeGame += HideObject;
     }
 
     // Update is called once per frame

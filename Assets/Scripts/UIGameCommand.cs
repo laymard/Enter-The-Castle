@@ -5,13 +5,12 @@ using UnityEngine;
 public class UIGameCommand : MonoBehaviour {
 
     public static UIGameCommand Singleton;
-    public static bool IsCreated = false;
 
     private GameManager m_GameManager;
 
 	// Use this for initialization
 	void Start () {
-        m_GameManager = GameManager.Singleton;
+        m_GameManager = GameManager.Instance;
 
     }
 	
