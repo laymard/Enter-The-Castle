@@ -268,7 +268,7 @@ public class WeaponController : MonoBehaviour, IPausable
     public bool CanTakeWeaponBack()
     {
         float sqrDist = (transform.position - m_WeaponContainer.transform.position).sqrMagnitude;
-        if (( m_WeaponState==E_WeaponState.THROWING || m_WeaponState == E_WeaponState.LANDED)  && sqrDist > 1.0f && !m_bIsOnPause)
+        if (( m_WeaponState==E_WeaponState.THROWING && sqrDist > 1.0f || m_WeaponState == E_WeaponState.LANDED)    && !m_bIsOnPause)
             return true;
 
         return false;
