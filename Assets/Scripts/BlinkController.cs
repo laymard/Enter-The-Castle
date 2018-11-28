@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using GameInterface;
 
-
-public class BlinkController : MonoBehaviour {
+public class BlinkController : MonoBehaviour, IPausable {
     enum E_BlinkStatus
     {
         NONE,
@@ -22,6 +22,7 @@ public class BlinkController : MonoBehaviour {
     private Camera m_mainCamera;
 
     public Capacity Capacity;
+    private bool m_bIsOnPause;
 
     // Use this for initialization
     void Start () {
@@ -29,12 +30,13 @@ public class BlinkController : MonoBehaviour {
         m_fBlinkTimer = -1.0f;
         m_eBlinkStatus = E_BlinkStatus.NONE;
         m_mainCamera = Camera.main;
+        m_bIsOnPause = false;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		if(Capacity.CanTriggerCapacity())
+		if(Capacity.CanTriggerCapacity() && !m_bIsOnPause)
         {
             BlinkCursor.gameObject.SetActive(false);
             if (Input.GetAxis("Capacity")>0.9f)
@@ -93,5 +95,14 @@ public class BlinkController : MonoBehaviour {
         
     }
 
+    public void OnPause()
+    {
+        m_bIsOnPause = true;
+    }
+
+    public void OnResume()
+    {
+        m_bIsOnPause = false;
+    }
 
 }
