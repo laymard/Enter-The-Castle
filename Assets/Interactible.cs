@@ -20,6 +20,8 @@ public class Interactible : MonoBehaviour {
 
     public bool NeedPlayerInFront;
 
+    public Transform UITargetTransform;
+
 	// Use this for initialization
 	void Start () {
 		

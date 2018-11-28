@@ -1395,6 +1395,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   InventoryToCheck: {fileID: 0}
   NeedPlayerInFront: 0
+  UITargetTransform: {fileID: 0}
 --- !u!1 &1047931911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1670,6 +1671,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   InventoryToCheck: {fileID: 0}
   NeedPlayerInFront: 0
+  UITargetTransform: {fileID: 0}
 --- !u!1 &1230399938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,6 +1922,34 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1329891521}
   m_CullTransparentMesh: 0
+--- !u!1 &1332684739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1332684740}
+  m_Layer: 0
+  m_Name: UIPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1332684740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1332684739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.194, y: 1.599, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1908303589}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1333533844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3151,6 +3181,11 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: 0.26024306
       objectReference: {fileID: 0}
+    - target: {fileID: 114648288002762838, guid: 05cfb52513e6a54419b519476495a8a6,
+        type: 2}
+      propertyPath: UITargetTransform
+      value: 
+      objectReference: {fileID: 1332684740}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05cfb52513e6a54419b519476495a8a6, type: 2}
   m_IsPrefabAsset: 0
@@ -4062,6 +4097,11 @@ MonoBehaviour:
   AllowRoaming: 0
   TimeToNewRoaming: 3
   RangeToNextDestination: 3
+--- !u!4 &1908303589 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4754041632391176, guid: 05cfb52513e6a54419b519476495a8a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 1554391836}
 --- !u!114 &1908303590
 MonoBehaviour:
   m_ObjectHideFlags: 0

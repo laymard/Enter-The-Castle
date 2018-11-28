@@ -96,9 +96,16 @@ public class WorldTextController : MonoBehaviour {
 
     private void ChangePositionFromInteractible(Interactible _interactible)
     {
-        Vector3 vInteractiblePosition = _interactible.transform.position;
+        if(_interactible.UITargetTransform != null)
+        {
+            transform.position = _interactible.UITargetTransform.position;
+        }
+        else
+        {
+            Vector3 vInteractiblePosition = _interactible.transform.position;
+            transform.position = vInteractiblePosition + Vector3.up * 0.15f;
+        }
 
-        transform.position = vInteractiblePosition + Vector3.up * 0.15f;
     }
 
     private void ResetAllAnimatorParam()
