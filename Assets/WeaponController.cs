@@ -142,7 +142,7 @@ public class WeaponController : MonoBehaviour, IPausable
         float fCoveredDist = 0.0f;
         SafeSetParent(null);
         StopCoroutine("FallingDelayed");
-        Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+        Vector3 vWeaponToTarget = ComputeWeaponToWeaponContainer();
         bool bTriggeredStopRotation = false;
         while (vWeaponToTarget.sqrMagnitude>0.05f)
         {
@@ -157,7 +157,7 @@ public class WeaponController : MonoBehaviour, IPausable
                 bTriggeredStopRotation = true;
             }
             fCoveredDist += ComingBackSpeed * Time.deltaTime;
-            vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+            vWeaponToTarget = ComputeWeaponToWeaponContainer();
             yield return null;
         }
 
@@ -225,7 +225,7 @@ public class WeaponController : MonoBehaviour, IPausable
 
     public Vector3 ComputeWeaponToWeaponContainer()
     {
-        return transform.position - m_WeaponContainer.transform.position;
+        return m_WeaponContainer.transform.position - transform.position;
     }
 
     private void ChangeSound(AudioClip _audioClip)
@@ -249,7 +249,7 @@ public class WeaponController : MonoBehaviour, IPausable
         Quaternion qStartOrientation = transform.rotation;
         float fCoveredDist = 0.0f;
         SafeSetParent(null);
-        Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+        Vector3 vWeaponToTarget = ComputeWeaponToWeaponContainer();
         while (vWeaponToTarget.sqrMagnitude > 0.05f)
         {
             Vector3 vDirToTarget = vWeaponToTarget.normalized;
@@ -258,7 +258,7 @@ public class WeaponController : MonoBehaviour, IPausable
             transform.rotation = Quaternion.Lerp(qStartOrientation, m_WeaponContainer.transform.rotation, fCoveredDist/ fDistToCover);
 
             fCoveredDist += ComingBackSpeed * Time.deltaTime;
-            vWeaponToTarget = -ComputeWeaponToWeaponContainer();
+            vWeaponToTarget = ComputeWeaponToWeaponContainer();
             yield return null;
         }
 
