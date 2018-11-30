@@ -3496,6 +3496,11 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: f47dc76a55165104e81864fc1a70b000,
         type: 2}
+    - target: {fileID: 114543428713721312, guid: 2e6bfea6372fb8348940a3f05e5f88dc,
+        type: 2}
+      propertyPath: TeleportVerticalOffset
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e6bfea6372fb8348940a3f05e5f88dc, type: 2}
   m_IsPrefabAsset: 0

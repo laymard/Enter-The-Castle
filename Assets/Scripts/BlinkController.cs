@@ -14,9 +14,11 @@ public class BlinkController : MonoBehaviour, IPausable {
     public float BlinkMaxRange;
     public float BlinkCoolDown;
     public AudioSource BlinkSound;
+    public float TeleportVerticalOffset;
 
     private Player m_Player;
     private Vector3 m_vCurrentBlinkPosition;
+    
     private float m_fBlinkTimer;
     private E_BlinkStatus m_eBlinkStatus;
     private Camera m_mainCamera;
@@ -80,6 +82,10 @@ public class BlinkController : MonoBehaviour, IPausable {
         if (Physics.Raycast(vCameraPosition, vCameraFront, out hit, BlinkMaxRange))
         {
             m_vCurrentBlinkPosition = hit.point;
+            if (Vector3.Dot(hit.normal,Vector3.up)>0.9f)
+            {
+                m_vCurrentBlinkPosition.y += TeleportVerticalOffset;
+            }
         }
         else
         {
