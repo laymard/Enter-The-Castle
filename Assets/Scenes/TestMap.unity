@@ -2439,7 +2439,7 @@ MonoBehaviour:
   ComingBackSpeed: 7
   WeaponAudio: {fileID: 11400000, guid: 181f6bf3ba73d92459a68d33f48250b6, type: 2}
   DistanceToGoToNormalRotation: 2
-  FallingTiming: 3
+  FallingTiming: 2
   RotationSpeed: 1000
   DebugShootEnabled: 1
 --- !u!82 &1485925435

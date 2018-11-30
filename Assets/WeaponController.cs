@@ -141,6 +141,7 @@ public class WeaponController : MonoBehaviour, IPausable
         Quaternion qStartOrientation = transform.rotation;
         float fCoveredDist = 0.0f;
         SafeSetParent(null);
+        StopCoroutine("FallingDelayed");
         Vector3 vWeaponToTarget = -ComputeWeaponToWeaponContainer();
         bool bTriggeredStopRotation = false;
         while (vWeaponToTarget.sqrMagnitude>0.05f)
@@ -152,7 +153,6 @@ public class WeaponController : MonoBehaviour, IPausable
             {
 
                 StopCoroutine("Rotate");
-                StopCoroutine("FallingDelayed");
                 StartCoroutine("RotateToNormalPos");
                 bTriggeredStopRotation = true;
             }
